@@ -3,12 +3,6 @@
 Rust CLI/GUI software updater for Linux/Windows/MacOS
 
 ### TODO
-
-* Add support for Windows
-  * Add support for `choco`
-  * Add support for `winget`
-* Add support for MacOS
-  * Add support for `brew`
 * Add support for Linux:
   * ~~Add support for `pacman`-based distros~~
   * Add support for `apt`-based distros
@@ -21,6 +15,11 @@ Rust CLI/GUI software updater for Linux/Windows/MacOS
   * Add support for `nix-channel`-based distros
   * Add support for `snap`
   * Add support for `flatpak`
+  * Add support for `brew`
+* Add support for Windows
+  * Add support for `choco`
+  * Add support for `winget`
+* Add support for MacOS
   * Add support for `brew`
 * CLI
   * Config support
