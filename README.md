@@ -5,7 +5,7 @@ Rust CLI/GUI software updater for Linux/Windows/MacOS
 ### TODO
 * Add support for Linux:
   * ~~Add support for `pacman`-based distros~~
-  * Add support for `apt`-based distros
+  * ~~Add support for `apt`-based distros~~
   * Add support for `rpm/yum`-based distros
   * Add support for `zypper`-based distros
   * Add support for `portage`-based distros
