@@ -1,11 +1,12 @@
 use cfg_if::cfg_if;
 
+use eyre::*;
 use software_updater_core::{
-    os::linux::arch::{ArchBuilder, AurPackageManager},
+    os::linux::{arch::ArchBuilder, deb::Deb},
     UpdateRoutine,
 };
 
-fn main() {
+fn main() -> Result<()> {
     cfg_if! {
         if #[cfg(debug_assetions)] {
             std::env::set_var("RUST_LOG", "debug");
@@ -20,10 +21,11 @@ fn main() {
 
     let arch = ArchBuilder::default()
         .pacman(true)
-        .aur(false)
-        .preferred_aur_package_manager(Some(AurPackageManager::Paru))
+        .aur(true)
         .build()
         .expect("Couldn't build Arch config");
 
-    arch.update().expect("Couldn't update packages");
+    arch.update()
+
+    /*(Deb {}).update()*/
 }

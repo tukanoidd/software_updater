@@ -1,0 +1,20 @@
+[package]
+name = "software_updater_core"
+version = "0.1.0"
+edition = "2021"
+authors = ["tukanoidd <tukanoid@outlook.com>"]
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+[lib]
+name = "software_updater_core"
+path = "src/lib.rs"
+
+[dependencies]
+getset = "0.1.2"
+derive_builder = "0.11.2"
+eyre = "0.6.8"
+platform-dirs = "0.3.0"
+which = "4.2.5"
+enum-iterator = "1.1.1"
+cfg-if = "1.0.0"
+log = "0.4.17"

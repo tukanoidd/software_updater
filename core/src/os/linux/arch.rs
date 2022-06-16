@@ -1,5 +1,4 @@
-use std::io::Write;
-use std::process::{Command, Stdio};
+use std::{io::Write, process::Command};
 
 use derive_builder::Builder;
 use enum_iterator::Sequence;
@@ -9,7 +8,7 @@ use which::which;
 
 use crate::{Available, PackageManager, UpdateRoutine};
 
-#[derive(Debug, Copy, Clone, PartialEq, Eq, Sequence)]
+#[derive(Debug, Copy, Clone, PartialEq, Eq, Hash, Sequence)]
 pub enum AurPackageManager {
     Yay,
     AurUtils,
@@ -17,8 +16,6 @@ pub enum AurPackageManager {
     Paru,
     Pamac,
 }
-
-impl AurPackageManager {}
 
 impl Available for AurPackageManager {
     fn available_name() -> &'static str {
@@ -34,6 +31,17 @@ impl PackageManager for AurPackageManager {
             AurPackageManager::Pikaur | AurPackageManager::Paru => "-Sua",
             AurPackageManager::Pamac => "upgrade",
         }
+    }
+
+    fn up_case_name() -> &'static str {
+        "Aur"
+    }
+}
+
+impl UpdateRoutine<AurPackageManager> for AurPackageManager {
+    fn preferred_package_manager() -> Option<AurPackageManager> {
+        //TODO(tukanoidd): config
+        Some(AurPackageManager::Paru)
     }
 }
 
@@ -51,18 +59,15 @@ impl From<AurPackageManager> for &'static str {
 
 #[derive(Getters, Setters, Builder)]
 pub struct Arch {
-    #[getset(get)]
+    #[getset(get_copy = "pub")]
     pacman: bool,
 
-    #[getset(get)]
+    #[getset(get_copy = "pub")]
     aur: bool,
-
-    #[getset(get)]
-    preferred_aur_package_manager: Option<AurPackageManager>,
 }
 
 impl Arch {
-    pub fn update_pacman() -> Result<()> {
+    pub fn update_pacman(&self) -> Result<()> {
         info!("Updating Arch Packages");
 
         let sudo = which("sudo")?;
@@ -80,11 +85,12 @@ impl Arch {
         Ok(())
     }
 
-    pub fn update_aur(preferred: Option<AurPackageManager>) -> Result<()> {
+    pub fn update_aur(&self) -> Result<()> {
         info!("Updating Aur Packages");
 
-        let aur_package_manager = AurPackageManager::available(preferred)?;
-        let result = Command::new::<&str>(aur_package_manager.into())
+        let (aur_package_manager, path) =
+            AurPackageManager::available(Self::preferred_package_manager())?;
+        let result = Command::new(path)
             .arg(aur_package_manager.update_instruction())
             .spawn()?
             .wait_with_output()?;
@@ -104,22 +110,21 @@ impl Default for Arch {
         Self {
             pacman: true,
             aur: true,
-            preferred_aur_package_manager: None,
         }
     }
 }
 
-impl UpdateRoutine for Arch {
+impl UpdateRoutine<AurPackageManager> for Arch {
     fn update(&self) -> Result<()> {
         let mut updated = false;
 
         if self.pacman {
-            Self::update_pacman()?;
+            self.update_pacman()?;
             updated = true;
         }
 
         if self.aur {
-            Self::update_aur(self.preferred_aur_package_manager)?;
+            self.update_aur()?;
             updated = true;
         }
 
@@ -128,5 +133,10 @@ impl UpdateRoutine for Arch {
         }
 
         Ok(())
+    }
+
+    #[inline]
+    fn preferred_package_manager() -> Option<AurPackageManager> {
+        AurPackageManager::preferred_package_manager()
     }
 }

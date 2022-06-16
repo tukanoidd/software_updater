@@ -1,0 +1,15 @@
+[package]
+name = "software_updater_cli"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+software_updater_core = { path = "../core" }
+cfg-if = "1.0.0"
+pretty_env_logger = "0.4.0"
+eyre = "0.6.8"
+
+[features]
+log_trace = []
