@@ -1,32 +1,57 @@
 ### About
 
-Rust CLI/GUI software updater for Linux/Windows/MacOS
+Rust CLI/GUI software updater for Linux/Windows/macOS
+
+!!! Doesn't work at the moment because interactive input for the child process is broken (for sudo) !!!
 
 ### TODO
-* Add support for Linux:
-  * ~~Add support for `pacman`-based distros~~
-  * ~~Add support for `apt`-based distros~~
-  * Add support for `rpm/yum`-based distros
-  * Add support for `zypper`-based distros
-  * Add support for `portage`-based distros
-  * Add support for `xbps`-based distros
-  * Add support for `paludis`-based distros
-  * Add support for `eopkg`-based distros
-  * Add support for `nix-channel`-based distros
-  * Add support for `snap`
-  * Add support for `flatpak`
-  * Add support for `brew`
-* Add support for Windows
-  * Add support for `choco`
-  * Add support for `winget`
-* Add support for MacOS
-  * Add support for `brew`
-* CLI
-  * Config support
-  * Arg parsing
-  * Config caching
-  * Proper functionality
-  * Start separate gui application process based either on flag or automatic DE detection 
-* GUI
-  * GTK
-  * QT
+
+#### Core
+
+##### General
+
+* [ ] TOML Config
+* [ ] Deal with sudo asking the password 
+
+##### Linux support:
+
+* [x] `pacman`-based distros
+  * [x] pacman 
+  * AUR:
+    * [x] pamac
+    * [x] paru
+    * [x] yay
+* [x] `deb`-based distros
+  * [x] apt 
+  * [x] aptitude 
+* [ ] `rpm`-based distros
+  * [ ] yum 
+  * [ ] dnf 
+  * [ ] zypper 
+* [ ] `portage`-based distros
+* [ ] `eopkg`-based distros
+* [ ] `nix-channel`-based distros
+* [ ] `apk`-based distros
+* [ ] `snap`
+* [ ] `flatpak`
+* [ ] `brew`
+
+##### Windows support:
+* [ ] `choco`
+* [ ] `winget`
+
+##### MacOS support:
+* [ ] `brew`
+
+##### Programming languages and installed packages
+* [ ] Rust
+* [ ] Dart
+* [ ] Python
+* [ ] Go
+
+#### CLI
+* [ ] Proper functionality
+
+#### GUI
+* [ ] GTK
+* [ ] QT

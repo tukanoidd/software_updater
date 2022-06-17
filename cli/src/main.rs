@@ -1,10 +1,6 @@
 use cfg_if::cfg_if;
 
 use eyre::*;
-use software_updater_core::{
-    os::linux::{arch::ArchBuilder, deb::Deb},
-    UpdateRoutine,
-};
 
 fn main() -> Result<()> {
     cfg_if! {
@@ -19,13 +15,5 @@ fn main() -> Result<()> {
 
     pretty_env_logger::init_timed();
 
-    let arch = ArchBuilder::default()
-        .pacman(true)
-        .aur(true)
-        .build()
-        .expect("Couldn't build Arch config");
-
-    arch.update()
-
-    /*(Deb {}).update()*/
+    software_updater_core::update()
 }
