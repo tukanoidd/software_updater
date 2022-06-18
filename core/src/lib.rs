@@ -93,9 +93,13 @@ pub fn update() -> Result<()> {
 
 pub mod os {
     use eyre::*;
-    use os_info::Type;
+    use lazy_static::lazy_static;
 
     use crate::PackageManager;
+
+    lazy_static! {
+        static ref OS_INFO: os_info::Info = os_info::get();
+    }
 
     pub fn update() -> Result<()> {
         // TODO(tukanoidd):
@@ -117,8 +121,9 @@ pub mod os {
 
     #[cfg(target_os = "linux")]
     fn update_linux() -> Result<()> {
-        let os_info = os_info::get();
-        let os_type = os_info.os_type();
+        use os_info::Type;
+
+        let os_type = OS_INFO.os_type();
 
         match os_type {
             // Pacman
