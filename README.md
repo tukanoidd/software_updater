@@ -1,8 +1,6 @@
 ### About
 
-Rust CLI/GUI software updater for Linux/Windows/macOS
-
-!!! Doesn't work at the moment because interactive input for the child process is broken (for sudo) !!!
+Rust CLI/GUI software updater for Linux/Windows/macOS0
 
 ### TODO
 
@@ -10,17 +8,12 @@ Rust CLI/GUI software updater for Linux/Windows/macOS
 
 ##### General
 
-* [ ] TOML Config
-* [ ] Deal with sudo asking the password 
+* [ ] TOML Config 
 
 ##### Linux support:
 
 * [x] `pacman`-based distros
-  * [x] pacman 
-  * AUR:
-    * [x] pamac
-    * [x] paru
-    * [x] yay
+  * [x] pamac
 * [x] `deb`-based distros
   * [x] apt 
   * [x] aptitude 

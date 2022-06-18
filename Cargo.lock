@@ -505,6 +505,16 @@ dependencies = [
 ]
 
 [[package]]
+name = "runas"
+version = "0.3.1"
+source = "git+https://github.com/SonnyX/rust-runas#9e980445be5fdb15c539ccf8de83ed77e2bc3597"
+dependencies = [
+ "cc",
+ "which",
+ "winapi",
+]
+
+[[package]]
 name = "rustc-demangle"
 version = "0.1.21"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -553,6 +563,7 @@ dependencies = [
  "os_info",
  "platform-dirs",
  "rexpect",
+ "runas",
  "which",
 ]
 

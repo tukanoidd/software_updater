@@ -1,41 +1,21 @@
+#[macro_use]
 extern crate log;
-
-use std::process::Command;
 
 use enum_iterator::{all, Sequence};
 use eyre::*;
-use log::{debug, info};
 use which::which;
 
 pub trait PackageManagerProgram {
     fn name(&self) -> &'static str;
     fn update_instruction(&self) -> &'static str;
 
-    fn execute_update(&self, sudo: bool) -> Result<()> {
+    fn execute_update(&self) -> Result<()> {
         info!("Starting '{}' update", self.name());
 
         let name = self.name();
         let instructions = self.update_instruction();
 
-        cfg_if::cfg_if! {
-            if #[cfg(not(target_os = "windows"))] {
-                let mut process = if sudo {
-                    debug!("Executing '{} {}' with sudo", name, instructions);
-
-                    Command::new("sudo")
-                        .arg("-S")
-                        .arg(name)
-                        .arg(instructions)
-                        .spawn()?
-                } else {
-                    Command::new(self.name())
-                        .arg(self.update_instruction())
-                        .spawn()?
-                };
-            } else {
-                panic!("Windows is not supported yet");
-            }
-        }
+        let mut process = runas::Command::new(name).arg(instructions).spawn()?;
 
         process.wait()?;
 
@@ -81,12 +61,11 @@ pub trait PackageManagerProgram {
 
 pub trait PackageManager {
     fn get_available_program() -> Option<Box<dyn PackageManagerProgram>>;
-    fn is_sudo() -> bool;
 
     #[inline]
     fn update(&self) -> Result<()> {
         if let Some(available_program) = Self::get_available_program() {
-            available_program.execute_update(Self::is_sudo())
+            available_program.execute_update()
         } else {
             bail!("No package manager is available");
         }
@@ -135,13 +114,9 @@ pub mod os {
         match os_type {
             // Pacman
             Type::Arch | Type::EndeavourOS | Type::Manjaro | Type::Garuda => {
-                use linux::pacman::{Pacman, PacmanAurUsage};
+                use linux::pacman::Pacman;
 
-                // TODO(tukanoidd): get data from config
-                Pacman {
-                    aur_usage: PacmanAurUsage::WithAur,
-                }
-                .update()?;
+                Pacman.update()?;
             }
 
             // Apt
@@ -208,89 +183,28 @@ pub mod os {
             use crate::{PackageManager, PackageManagerProgram};
 
             #[derive(Debug, Copy, Clone, PartialEq, Eq, Sequence)]
-            pub enum AurProgram {
-                Pamac,
-                Yay,
-                Paru,
-            }
-
-            impl PackageManagerProgram for AurProgram {
-                fn name(&self) -> &'static str {
-                    match self {
-                        AurProgram::Pamac => "pamac",
-                        AurProgram::Yay => "yay",
-                        AurProgram::Paru => "paru",
-                    }
-                }
-
-                fn update_instruction(&self) -> &'static str {
-                    match self {
-                        AurProgram::Pamac => "upgrade",
-                        AurProgram::Yay | AurProgram::Paru => "-Sua",
-                    }
-                }
-            }
-
-            pub enum PacmanAurUsage {
-                NoAur,
-                OnlyAur,
-                WithAur,
-            }
-
-            impl PacmanAurUsage {
-                pub fn use_pacman_aur(&self) -> (bool, bool) {
-                    match self {
-                        PacmanAurUsage::NoAur => (true, false),
-                        PacmanAurUsage::OnlyAur => (false, true),
-                        PacmanAurUsage::WithAur => (true, true),
-                    }
-                }
-            }
-
-            #[derive(Debug, Copy, Clone, PartialEq, Eq, Sequence)]
             pub enum PacmanProgram {
-                Pacman,
+                Pamac,
             }
 
             impl PackageManagerProgram for PacmanProgram {
                 #[inline]
                 fn name(&self) -> &'static str {
-                    "pacman"
+                    "pamac"
                 }
 
                 #[inline]
                 fn update_instruction(&self) -> &'static str {
-                    "-Syu"
+                    "upgrade"
                 }
             }
 
-            pub struct Pacman {
-                pub aur_usage: PacmanAurUsage,
-            }
+            pub struct Pacman;
 
             impl PackageManager for Pacman {
+                #[inline]
                 fn get_available_program() -> Option<Box<dyn PackageManagerProgram>> {
-                    None
-                }
-
-                fn is_sudo() -> bool {
-                    true
-                }
-
-                fn update(&self) -> eyre::Result<()> {
-                    let (pacman, aur) = self.aur_usage.use_pacman_aur();
-
-                    if pacman {
-                        PacmanProgram::Pacman.execute_update(true)?;
-                    }
-
-                    if aur {
-                        // TODO(tukanoidd): get data from config
-                        AurProgram::available_program(Some(AurProgram::Paru))
-                            .execute_update(false)?;
-                    }
-
-                    Ok(())
+                    Some(Box::new(PacmanProgram::available_program(None)))
                 }
             }
         }
@@ -327,10 +241,6 @@ pub mod os {
                     Some(Box::new(DebProgram::available_program(Some(
                         DebProgram::Aptitude,
                     ))))
-                }
-
-                fn is_sudo() -> bool {
-                    true
                 }
             }
         }

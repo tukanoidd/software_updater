@@ -19,6 +19,7 @@ enum-iterator = "1.1.1"
 cfg-if = "1.0.0"
 log = "0.4.17"
 os_info = { git = "https://www.github.com/tukanoidd/os_info" }
+runas = { git = "https://github.com/SonnyX/rust-runas" }
 
 [target.'cfg(not(target_os = "widows"))'.dependencies]
 rexpect = "0.4.0"
