@@ -195,28 +195,41 @@ pub mod os {
             pub enum PacmanProgram {
                 Pacman,
                 Pamac,
-                PamacAur,
+                PamacWithAur,
+                Yay,
+                Paru,
             }
 
             impl PackageManagerProgram for PacmanProgram {
                 #[inline]
                 fn name(&self) -> &'static str {
-                    "pamac"
+                    use PacmanProgram::*;
+
+                    match self {
+                        PacmanProgram::Pacman => "pacman",
+                        Pamac | PamacWithAur => "pamac",
+                        Yay => "yay",
+                        Paru => "paru",
+                    }
                 }
 
                 #[inline]
                 fn update_instructions(&self) -> &[&'static str] {
+                    use PacmanProgram::*;
+
                     match self {
-                        PacmanProgram::Pamac => &["upgrade"],
-                        PacmanProgram::PamacAur => &["upgrade", "-a"],
-                        PacmanProgram::Pacman => &["-Syu"],
+                        Pamac => &["upgrade"],
+                        PamacWithAur => &["upgrade", "-a"],
+                        Pacman | Yay | Paru => &["-Syu"],
                     }
                 }
 
                 fn is_sudo(&self) -> bool {
+                    use PacmanProgram::*;
+
                     match self {
-                        PacmanProgram::Pamac | PacmanProgram::Pacman => true,
-                        PacmanProgram::PamacAur => false,
+                        Pamac | Pacman => true,
+                        PamacWithAur | Yay | Paru => false,
                     }
                 }
             }
@@ -228,7 +241,7 @@ pub mod os {
                 fn get_available_program() -> Option<Box<dyn PackageManagerProgram>> {
                     // TODO(tukanoidd): config
                     Some(Box::new(PacmanProgram::available_program(Some(
-                        PacmanProgram::PamacAur,
+                        PacmanProgram::Paru,
                     ))))
                 }
             }

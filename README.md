@@ -15,6 +15,8 @@ Rust CLI/GUI software updater for Linux/Windows/macOS0
 * [x] `pacman`-based distros
   * [x] pacman
   * [x] pamac
+  * [x] paru
+  * [x] yay
 * [x] `deb`-based distros
   * [x] apt 
   * [x] aptitude 
