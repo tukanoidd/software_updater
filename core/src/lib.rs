@@ -204,7 +204,9 @@ pub mod os {
             impl PackageManager for Pacman {
                 #[inline]
                 fn get_available_program() -> Option<Box<dyn PackageManagerProgram>> {
-                    Some(Box::new(PacmanProgram::available_program(None)))
+                    Some(Box::new(PacmanProgram::available_program(Some(
+                        PacmanProgram::Pamac,
+                    ))))
                 }
             }
         }
