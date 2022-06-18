@@ -13,6 +13,7 @@ Rust CLI/GUI software updater for Linux/Windows/macOS0
 ##### Linux support:
 
 * [x] `pacman`-based distros
+  * [x] pacman
   * [x] pamac
 * [x] `deb`-based distros
   * [x] apt 

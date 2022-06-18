@@ -7,17 +7,26 @@ use which::which;
 
 pub trait PackageManagerProgram {
     fn name(&self) -> &'static str;
-    fn update_instruction(&self) -> &'static str;
+    fn update_instructions(&self) -> &[&'static str];
+    fn is_sudo(&self) -> bool;
 
     fn execute_update(&self) -> Result<()> {
         info!("Starting '{}' update", self.name());
 
         let name = self.name();
-        let instructions = self.update_instruction();
+        let instructions = self.update_instructions();
 
-        let mut process = runas::Command::new(name).arg(instructions).spawn()?;
+        if self.is_sudo() {
+            let mut process = runas::Command::new(name).args(instructions).spawn()?;
 
-        process.wait()?;
+            process.wait()?;
+        } else {
+            let mut process = std::process::Command::new(name)
+                .args(instructions)
+                .spawn()?;
+
+            process.wait()?;
+        }
 
         info!("'{}' update is finished", self.name());
 
@@ -184,7 +193,9 @@ pub mod os {
 
             #[derive(Debug, Copy, Clone, PartialEq, Eq, Sequence)]
             pub enum PacmanProgram {
+                Pacman,
                 Pamac,
+                PamacAur,
             }
 
             impl PackageManagerProgram for PacmanProgram {
@@ -194,8 +205,19 @@ pub mod os {
                 }
 
                 #[inline]
-                fn update_instruction(&self) -> &'static str {
-                    "upgrade"
+                fn update_instructions(&self) -> &[&'static str] {
+                    match self {
+                        PacmanProgram::Pamac => &["upgrade"],
+                        PacmanProgram::PamacAur => &["upgrade", "-a"],
+                        PacmanProgram::Pacman => &["-Syu"],
+                    }
+                }
+
+                fn is_sudo(&self) -> bool {
+                    match self {
+                        PacmanProgram::Pamac | PacmanProgram::Pacman => true,
+                        PacmanProgram::PamacAur => false,
+                    }
                 }
             }
 
@@ -204,8 +226,9 @@ pub mod os {
             impl PackageManager for Pacman {
                 #[inline]
                 fn get_available_program() -> Option<Box<dyn PackageManagerProgram>> {
+                    // TODO(tukanoidd): config
                     Some(Box::new(PacmanProgram::available_program(Some(
-                        PacmanProgram::Pamac,
+                        PacmanProgram::PamacAur,
                     ))))
                 }
             }
@@ -230,8 +253,13 @@ pub mod os {
                     }
                 }
 
-                fn update_instruction(&self) -> &'static str {
-                    "update"
+                fn update_instructions(&self) -> &[&'static str] {
+                    &["update"]
+                }
+
+                #[inline]
+                fn is_sudo(&self) -> bool {
+                    true
                 }
             }
 
