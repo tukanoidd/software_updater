@@ -193,11 +193,11 @@ pub mod os {
 
             #[derive(Debug, Copy, Clone, PartialEq, Eq, Sequence)]
             pub enum PacmanProgram {
-                Pacman,
-                Pamac,
-                PamacWithAur,
-                Yay,
                 Paru,
+                Yay,
+                PamacWithAur,
+                Pamac,
+                Pacman,
             }
 
             impl PackageManagerProgram for PacmanProgram {

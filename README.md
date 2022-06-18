@@ -15,11 +15,11 @@ Rust CLI/GUI software updater for Linux/Windows/macOS0
 * [x] `pacman`-based distros
   * [x] pacman
   * [x] pamac
-  * [x] paru
+  * [x] paru (default for now, falls back to first available)
   * [x] yay
 * [x] `deb`-based distros
   * [x] apt 
-  * [x] aptitude 
+  * [x] aptitude (default for now, falls back to apt)
 * [ ] `rpm`-based distros
   * [ ] yum 
   * [ ] dnf 
