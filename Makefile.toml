@@ -1,7 +1,0 @@
-[env]
-CARGO_MAKE_EXTEND_WORKSPACE_MAKEFILE = true
-
-[tasks.build-cli]
-command = "cargo"
-args = ["build -p software_updater_cli"]
-
