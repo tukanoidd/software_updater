@@ -298,13 +298,13 @@ pub mod os {
                     {
                         name: Paru,
                         as_str: "paru",
-                        commands: ["-Sua"],
+                        commands: ["-Syu"],
                         is_sudo: false,
                     },
                     {
                         name: Yay,
                         as_str: "yay",
-                        commands: ["-Sua"],
+                        commands: ["-Syu"],
                         is_sudo: false,
                     },
                     {
