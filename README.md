@@ -9,6 +9,7 @@ Rust CLI/GUI software updater for Linux/Windows/macOS0
 ##### General
 
 * [ ] TOML Config 
+* [ ] Error handling with proper error messages every step of the way
 
 ##### Linux support:
 
@@ -40,10 +41,15 @@ Rust CLI/GUI software updater for Linux/Windows/macOS0
 * [ ] `brew`
 
 ##### Programming languages and installed packages
-* [ ] Rust
+* [x] Rust
+  * [x] rustup
+  * [x] cargo (via cargo-update subcommand)
 * [ ] Dart
 * [ ] Python
 * [ ] Go
+* [ ] JS
+  * [ ] npm
+  * [ ] yarn
 
 #### CLI
 * [ ] Proper functionality
