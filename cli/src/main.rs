@@ -1,8 +1,6 @@
 use cfg_if::cfg_if;
 
-use eyre::*;
-
-fn main() -> Result<()> {
+fn main() {
     cfg_if! {
         if #[cfg(debug_assetions)] {
             std::env::set_var("RUST_LOG", "debug");

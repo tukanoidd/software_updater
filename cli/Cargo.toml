@@ -12,7 +12,6 @@ path = "src/main.rs"
 software_updater_core = { path = "../core" }
 cfg-if = "1.0.0"
 pretty_env_logger = "0.4.0"
-eyre = "0.6.8"
 
 [features]
 log_trace = []

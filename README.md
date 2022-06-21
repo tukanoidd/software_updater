@@ -8,7 +8,10 @@ Rust CLI/GUI software updater for Linux/Windows/macOS0
 
 ##### General
 
-* [ ] TOML Config 
+* [x] JSON Config 
+  * Linux: $XDG_CONFIG_HOME/software_updater/config.json or $HOME/.config/software_updater/config.json
+  * Windows: {FOLDERID_RoamingAppData}/software_updater/config.json
+  * MacOS: $HOME/Library/Application Support/software_updater/config.json
 * [ ] Error handling with proper error messages every step of the way
 
 ##### Linux support:
@@ -45,6 +48,8 @@ Rust CLI/GUI software updater for Linux/Windows/macOS0
   * [x] rustup
   * [x] cargo (via cargo-update subcommand)
 * [ ] Dart
+  * [ ] dart 
+  * [ ] flutter 
 * [ ] Python
 * [ ] Go
 * [ ] JS
