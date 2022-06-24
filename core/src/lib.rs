@@ -56,14 +56,14 @@ pub fn update() {
                 | Type::OracleLinux
                 | Type::Redhat
                 | Type::RedHatEnterprise => {
-                    if let Some(rpm) = rpm {
+                    if let Some(_rpm) = rpm {
                         error!("Dnf/Yum is not supported yet");
                     }
                 }
 
                 // Zypper
                 Type::openSUSE | Type::SUSE => {
-                    if let Some(rpm) = rpm {
+                    if let Some(_rpm) = rpm {
                         error!("Zypper is not supported yet");
                     }
                 }
