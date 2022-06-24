@@ -22,14 +22,14 @@ pub fn update() {
         if let Some(LinuxConfig {
             arch,
             deb,
-            rpm: _rpm,
-            portage: _portage,
-            eopkg: _eopkg,
-            nix_channel: _nix_channel,
-            apk: _apk,
-            snap: _snap,
-            flatpak: _flatpak,
-            brew: _brew,
+            rpm,
+            portage,
+            eopkg,
+            nix_channel,
+            apk,
+            snap,
+            flatpak,
+            brew,
         }) = os_config.linux
         {
             let os_info = os_info::get();
@@ -56,46 +56,70 @@ pub fn update() {
                 | Type::OracleLinux
                 | Type::Redhat
                 | Type::RedHatEnterprise => {
-                    error!("Dnf/Yum is not supported yet");
+                    if let Some(rpm) = rpm {
+                        error!("Dnf/Yum is not supported yet");
+                    }
                 }
 
                 // Zypper
                 Type::openSUSE | Type::SUSE => {
-                    error!("Zypper is not supported yet");
+                    if let Some(rpm) = rpm {
+                        error!("Zypper is not supported yet");
+                    }
                 }
 
                 // Portage
                 Type::Gentoo => {
-                    error!("Portage is not supported yet");
+                    if portage {
+                        error!("Portage is not supported yet");
+                    }
                 }
 
                 // Eopkg
                 Type::Solus => {
-                    error!("Eopkg is not supported yet");
+                    if eopkg {
+                        error!("Eopkg is not supported yet");
+                    }
                 }
 
                 // Nix-channel
                 Type::NixOS => {
-                    error!("Nix-channel is not supported yet");
+                    if nix_channel {
+                        error!("Nix-channel is not supported yet");
+                    }
                 }
 
                 // Apk
                 Type::Alpine => {
-                    error!("Apk is not supported yet");
+                    if apk {
+                        error!("Apk is not supported yet");
+                    }
                 }
 
                 _ => error!("{} is unsupported", os_type),
+            }
+
+            if snap {
+                error!("Snap is not supported yet");
+            }
+
+            if flatpak {
+                error!("Flatpak is not supported yet");
+            }
+
+            if brew {
+                error!("Brew is not supported yet");
             }
         }
 
         #[cfg(target_os = "windows")]
         if let Some(windows) = os_config.windows {
-            todo!()
+            error!("Windows is not supported yet");
         }
 
         #[cfg(target_os = "macos")]
         if let Some(macos) = os_config.macos {
-            todo!()
+            error!("MacOS is not supported yet");
         }
     }
 
