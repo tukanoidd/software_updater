@@ -9,7 +9,7 @@ use software_updater_config::{
 };
 
 use crate::{
-    language::update_rust,
+    language::{update_js, update_rust},
     os::linux::{update_arch, update_deb},
 };
 
@@ -103,19 +103,25 @@ pub fn update() {
         }
     }
 
-    if let Some(LanguageConfig {
-        rust,
-        dart: _,
-        python: _,
-        go: _,
-        js: _,
-    }) = language
-    {
+    if let Some(LanguageConfig { rust, dart, js }) = language {
         if let Some(rust) = rust {
             update_rust(rust);
         }
 
-        // TODO(tukanoidd): implement everything else here too
+        if dart {
+            info!("Starting Flutter update!");
+            if which::which("flutter").is_ok() {
+                execute_update(false, "flutter", &["upgrade"]);
+                execute_update(false, "flutter", &["update-packages"]);
+            } else {
+                error!("cargo is not installed");
+            }
+            info!("Finished Flutter update!");
+        }
+
+        if let Some(js) = js {
+            update_js(js);
+        }
     }
 }
 
@@ -148,7 +154,8 @@ pub fn available_program(programs: &[&str], preferred: Option<String>) -> Result
 }
 
 pub fn execute_update(sudo: bool, program_name: &str, program_args: &[&str]) {
-    info!("Starting `{}` update", program_name);
+    let full_command = format!("{} {}", program_name, program_args.join(" "));
+    info!("Executing `{}`", full_command);
 
     let child = if sudo {
         let mut command = runas::Command::new(program_name);
@@ -192,7 +199,7 @@ pub fn execute_update(sudo: bool, program_name: &str, program_args: &[&str]) {
         }
     }
 
-    info!("Finished `{}` update", program_name);
+    info!("Execution of `{}` finished", full_command);
 }
 
 pub mod os {
@@ -314,7 +321,7 @@ pub mod os {
 }
 
 pub mod language {
-    use software_updater_config::language_config::RustConfig;
+    use software_updater_config::language_config::{JSConfig, RustConfig};
 
     use crate::execute_update;
 
@@ -336,6 +343,30 @@ pub mod language {
                 execute_update(false, "cargo", &["install-update", "-a"]);
             } else {
                 error!("cargo is not installed");
+            }
+        }
+
+        info!("Finished Rust update!");
+    }
+
+    pub fn update_js(config: JSConfig) {
+        info!("Starting Rust update!");
+
+        let JSConfig { npm, yarn } = config;
+
+        if npm {
+            if which::which("npm").is_ok() {
+                execute_update(true, "npm", &["-g", "upgrade"]);
+            } else {
+                error!("npm is not installed");
+            }
+        }
+
+        if yarn {
+            if which::which("yarn").is_ok() {
+                execute_update(false, "yarn", &["global", "upgrade"]);
+            } else {
+                error!("yarn is not installed");
             }
         }
 

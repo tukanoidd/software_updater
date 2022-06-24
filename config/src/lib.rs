@@ -204,9 +204,7 @@ pub mod language_config {
     #[derive(Serialize, Deserialize)]
     pub struct LanguageConfig {
         pub rust: Option<RustConfig>,
-        pub dart: Option<DartConfig>,
-        pub python: bool,
-        pub go: bool,
+        pub dart: bool,
         pub js: Option<JSConfig>,
     }
 
@@ -215,9 +213,7 @@ pub mod language_config {
         fn default() -> Self {
             Self {
                 rust: Some(Default::default()),
-                dart: Some(Default::default()),
-                python: true,
-                go: true,
+                dart: true,
                 js: Some(Default::default()),
             }
         }
@@ -240,17 +236,17 @@ pub mod language_config {
     }
 
     #[derive(Serialize, Deserialize)]
-    pub struct DartConfig {
-        pub dart: bool,
-        pub flutter: bool,
+    pub struct PythonConfig {
+        pub pip2: bool,
+        pub pip3: bool,
     }
 
-    impl Default for DartConfig {
+    impl Default for PythonConfig {
         #[inline]
         fn default() -> Self {
             Self {
-                dart: true,
-                flutter: true,
+                pip2: true,
+                pip3: true,
             }
         }
     }
@@ -265,7 +261,7 @@ pub mod language_config {
         #[inline]
         fn default() -> Self {
             Self {
-                npm: false,
+                npm: true,
                 yarn: true,
             }
         }

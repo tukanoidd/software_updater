@@ -47,14 +47,10 @@ Rust CLI/GUI software updater for Linux/Windows/macOS0
 * [x] Rust
   * [x] rustup
   * [x] cargo (via cargo-update subcommand)
-* [ ] Dart
-  * [ ] dart 
-  * [ ] flutter 
-* [ ] Python
-* [ ] Go
-* [ ] JS
-  * [ ] npm
-  * [ ] yarn
+* [x] Dart (Flutter)
+* [x] JS
+  * [x] npm
+  * [x] yarn
 
 #### CLI
 * [ ] Proper functionality
