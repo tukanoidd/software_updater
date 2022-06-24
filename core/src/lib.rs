@@ -40,8 +40,6 @@ pub fn update() {
                 Type::Arch | Type::EndeavourOS | Type::Manjaro | Type::Garuda => {
                     if let Some(arch) = arch {
                         update_arch(arch);
-                    } else {
-                        error!("Arch config was not defined")
                     }
                 }
 
@@ -49,8 +47,6 @@ pub fn update() {
                 Type::Debian | Type::Mint | Type::Pop | Type::Raspbian | Type::Ubuntu => {
                     if let Some(deb) = deb {
                         update_deb(deb);
-                    } else {
-                        error!("Deb config was not defined")
                     }
                 }
 
